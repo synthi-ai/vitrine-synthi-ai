@@ -1,0 +1,52 @@
+"use client";
+
+import Image from "next/image";
+import React from "react";
+import FAQSection from "../Faq";
+import AboutUsSection from "./AboutUsSection";
+import AssetsDisplaySection from "./ProfessionalSectionsComplete";
+import CallToActionSection from "./CallToActionSection";
+import CustomAssetsSection from "./CustomActionAsset";
+import FeaturesDisplaySection from "./TeamSection";
+import FeaturesOverviewSection from "./FeaturesOverviewSection";
+import NavigationMenuSection from "./NavogationMenuSection";
+import VisionStatementSection from "./VisionStatementSection";
+
+export default function About() {
+  return (
+    <div className="relative w-full bg-color-palette-dark-bg">
+      <div className="relative w-full">
+        {/* Background gradients */}
+        <div className="absolute w-[470px] h-[412px] top-0 left-[147px] rounded-[10px] blur-[100px] bg-gradient-to-b from-[rgba(19,23,56,1)] to-[rgba(49,91,239,1)] opacity-20" />
+        <div className="absolute w-[664px] h-[454px] top-[428px] left-[277px] blur-[150px] bg-gradient-to-b from-[rgba(19,23,56,1)] to-[rgba(44,53,134,1)] opacity-[0.16] rounded-[10px]" />
+        <div className="absolute w-[537px] h-[428px] top-[2964px] left-[472px] bg-[#1e4290] rotate-[23.32deg] blur-[100px] opacity-[0.06] rounded-[10px]" />
+        <div className="absolute w-[655px] h-[412px] top-[2270px] left-[1257px] blur-[100px] bg-gradient-to-b from-[rgba(19,23,56,1)] to-[rgba(49,91,239,1)] opacity-[0.16] rounded-[10px]" />
+        <div className="absolute w-[681px] h-[713px] top-[5335px] left-[113px] bg-[#1e4290] rotate-[23.32deg] blur-[150px] opacity-[0.06] rounded-[10px]" />
+
+        {/* Main content */}
+        <div className="relative z-10">
+          <NavigationMenuSection />
+
+          <div className="flex flex-col items-center gap-[150px] pt-[100px]">
+            <AboutUsSection />
+            <VisionStatementSection />
+            <CustomAssetsSection />
+            <FeaturesOverviewSection />
+            <FeaturesDisplaySection />
+            <AssetsDisplaySection />
+            <CallToActionSection />
+            <FAQSection />
+            <Image
+              className="w-full"
+              alt="Footer content"
+              src="/chemin/vers/image.jpg"
+              layout="responsive"
+              width={1200} 
+              height={400} 
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

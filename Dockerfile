@@ -1,34 +1,49 @@
-# Utiliser une image Node.js 21 comme base
-FROM node:21-alpine AS base
+FROM node:21-slim AS builder
 
-# Définir le répertoire de travail dans le conteneur
+
+ENV NODE_ENV=production
+
 WORKDIR /app
 
-# Copier les fichiers de package et installer les dépendances
-COPY package*.json ./
-RUN npm install
+RUN apt-get update && \
+    apt-get install -y curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copier tous les fichiers de l'application
+RUN yarn config set network-timeout 300000 && \
+    yarn config set network-retry 3 && \
+    yarn install --frozen-lockfile
+
+COPY package.json yarn.lock ./
+
+RUN yarn add -D @tailwindcss/postcss
+
+RUN yarn install --frozen-lockfile
+
 COPY . .
 
-# Construire l'application Next.js
-RUN npm run build
+RUN yarn build
 
-# Image pour l'exécution de l'application en production
-FROM node:21-alpine AS runner
+FROM node:21-slim AS runner
+
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 WORKDIR /app
 
-# Copier les fichiers construits de l'étape précédente
-COPY --from=base /app/public ./public
-COPY --from=base /app/.next ./.next
-COPY --from=base /app/package*.json ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
 
-# Installer les dépendances nécessaires pour l'exécution
-RUN npm install --production
+RUN yarn install --production --frozen-lockfile && yarn cache clean
 
-# Exposer le port sur lequel l'application Next.js écoute
+USER nextjs
+
 EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# Commande pour démarrer l'application Next.js
-CMD ["npm", "start"]
+# Commande de démarrage
+CMD ["yarn", "start"]

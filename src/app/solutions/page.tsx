@@ -9,13 +9,11 @@ export default async function SolutionsPage() {
   
   return (
     <div className="bg-gray-900 text-white min-h-screen">
-
-
       {/* Solutions Content */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <p className="text-blue-400 mb-4">Our solutions</p>
-          <h1 className="text-4xl font-bold mb-8">Synthi AI Solutions</h1>
+          <p className="text-blue-400 mb-4">Nos solutions</p>
+          <h1 className="text-4xl font-bold mb-8">Solutions Technologiques</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -27,12 +25,19 @@ export default async function SolutionsPage() {
             >
               <div className="bg-indigo-900 p-4">
                 <div className="h-40 w-full relative bg-purple-800 rounded-lg overflow-hidden">
-                  {solution.image ? (
+                  {solution.images && solution.images.length > 0 ? (
                     <Image
-                      src={solution.image}
-                      alt={solution.title}
+                      src={solution.images[0]}
+                      alt={solution.titre}
                       fill
                       className="object-cover"
+                    />
+                  ) : solution.icon ? (
+                    <Image
+                      src={solution.icon}
+                      alt={solution.titre}
+                      fill
+                      className="object-contain p-4"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -40,20 +45,22 @@ export default async function SolutionsPage() {
                     </div>
                   )}
                 </div>
-                <div className="flex space-x-4 mt-4">
-                  {solution.tags.map((tag) => (
-                    <span key={tag} className="text-sm text-gray-300">
+                
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {solution.tags.map((tag, index) => (
+                    <span key={index} className="text-xs px-2 py-1 bg-indigo-700 rounded-full text-gray-300">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <h3 className="text-xl font-semibold mt-4 text-white">{solution.title}</h3>
+                
+                <h3 className="text-xl font-semibold mt-4 text-white">{solution.titre}</h3>
+                <p className="text-gray-300 text-sm mt-2 line-clamp-2">{solution.description_courte}</p>
               </div>
             </Link>
           ))}
         </div>
       </div>
-
     </div>
   );
 }

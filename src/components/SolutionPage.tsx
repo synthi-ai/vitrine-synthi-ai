@@ -1,84 +1,280 @@
-'use client';
-
+import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
-import { Solution, SolutionFeature } from '../../models/Solution';
+import { formatDate } from '../lib/utils';
+import { Solution } from '../../models/Solution';
 
-interface FeatureCardProps {
-  feature: SolutionFeature;
+export default function SolutionPage({ solution }: { solution: Solution }) {
+    return (
+        <div className="bg-gray-900 text-white min-h-screen">
+            {/* Hero Section */}
+            <div className="bg-gradient-to-b from-indigo-900 to-gray-900">
+                <div className="container mx-auto px-4 py-16">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="flex items-center gap-2 text-blue-400 mb-4">
+                            <Link href="/solutions" className="hover:underline">
+                                Solutions
+                            </Link>
+                            <span>/</span>
+                            <span>{solution.titre}</span>
+                        </div>
+                        
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6">{solution.titre}</h1>
+                        
+                        <div className="flex flex-wrap gap-2 mb-8">
+                            {solution.tags.map((tag, index) => (
+                                <span key={index} className="text-sm px-3 py-1 bg-indigo-800 rounded-full text-gray-200">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                        
+                        <p className="text-xl text-gray-300 mb-8">{solution.description_courte}</p>
+                        
+                        {solution.auteur && (
+                            <div className="flex items-center gap-4 mb-8">
+                                {solution.auteur.photo && (
+                                    <div className="w-12 h-12 rounded-full overflow-hidden relative">
+                                        <Image 
+                                            src={solution.auteur.photo} 
+                                            alt={solution.auteur.nom}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <div>
+                                    <p className="font-medium">{solution.auteur.nom}</p>
+                                    <p className="text-sm text-gray-400">{solution.auteur.poste}</p>
+                                </div>
+                                <div className="ml-auto text-right">
+                                    <p className="text-sm text-gray-400">
+                                        Créé le {formatDate(solution.date_de_creation)}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+            
+            {/* Images Gallery */}
+            {solution.images && solution.images.length > 0 && (
+                <div className="container mx-auto px-4 py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {solution.images.map((image, index) => (
+                            <div key={index} className="aspect-video relative rounded-lg overflow-hidden">
+                                <Image
+                                    src={image}
+                                    alt={`${solution.titre} - image ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+            
+            {/* Description */}
+            <div className="container mx-auto px-4 py-12">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-3xl font-bold mb-8">À propos de cette solution</h2>
+                    <div className="prose prose-lg prose-invert max-w-none">
+                        {solution.description_longue.split('\n').map((paragraph, index) => (
+                            <p key={index} className="mb-4">{paragraph}</p>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            
+            {/* Fonctionnalités */}
+            {solution.fonctionnalites && solution.fonctionnalites.length > 0 && (
+                <div className="bg-gray-800 py-16">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-4xl mx-auto">
+                            <h2 className="text-3xl font-bold mb-8">Fonctionnalités clés</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {solution.fonctionnalites.map((feature, index) => (
+                                    <div key={index} className="bg-gray-700 p-6 rounded-lg">
+                                        <div className="text-blue-400 text-xl mb-2">✓</div>
+                                        <p>{feature}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Objectifs */}
+            {solution.objectifs && solution.objectifs.length > 0 && (
+                <div className="container mx-auto px-4 py-16">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-3xl font-bold mb-8">Objectifs</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {solution.objectifs.map((objective) => (
+                                <div key={objective.id} className="flex gap-4">
+                                    {objective.icon ? (
+                                        <div className="w-12 h-12 relative flex-shrink-0">
+                                            <Image
+                                                src={objective.icon}
+                                                alt={objective.titre}
+                                                fill
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-12 h-12 bg-indigo-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <span className="text-2xl">🎯</span>
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h3 className="text-xl font-medium mb-2">{objective.titre}</h3>
+                                        <p className="text-gray-300">{objective.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Use Cases */}
+            {solution.use_cases && solution.use_cases.length > 0 && (
+                <div className="bg-gray-800 py-16">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-4xl mx-auto">
+                            <h2 className="text-3xl font-bold mb-8">Cas d&apos;usage</h2>
+                            <div className="grid grid-cols-1 gap-8">
+                                {solution.use_cases.map((useCase) => (
+                                    <div key={useCase.id} className="bg-gray-700 rounded-lg overflow-hidden">
+                                        <div className="grid grid-cols-1 md:grid-cols-2">
+                                            {useCase.image && (
+                                                <div className="aspect-video relative">
+                                                    <Image
+                                                        src={useCase.image}
+                                                        alt={useCase.titre}
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="p-6">
+                                                <h3 className="text-xl font-medium mb-4">{useCase.titre}</h3>
+                                                <p className="text-gray-300">{useCase.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Technologies */}
+            {solution.technologies_utilisees && solution.technologies_utilisees.length > 0 && (
+                <div className="container mx-auto px-4 py-16">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-3xl font-bold mb-8">Technologies utilisées</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                            {solution.technologies_utilisees.map((tech) => (
+                                <div key={tech.id} className="text-center">
+                                    {tech.icone ? (
+                                        <div className="w-16 h-16 mx-auto relative mb-4">
+                                            <Image
+                                                src={tech.icone}
+                                                alt={tech.nom}
+                                                fill
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-16 h-16 mx-auto bg-indigo-800 rounded-full flex items-center justify-center mb-4">
+                                            <span className="text-2xl">🔧</span>
+                                        </div>
+                                    )}
+                                    <h3 className="font-medium">{tech.nom}</h3>
+                                    <p className="text-sm text-gray-400">{tech.type}</p>
+                                    {tech.url_doc && (
+                                        <a 
+                                            href={tech.url_doc} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="text-blue-400 text-sm mt-2 inline-block hover:underline"
+                                        >
+                                            Documentation
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Vidéos */}
+            {solution.videos_demo && solution.videos_demo.length > 0 && (
+                <div className="bg-gray-800 py-16">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-4xl mx-auto">
+                            <h2 className="text-3xl font-bold mb-8">Vidéos de démonstration</h2>
+                            <div className="grid grid-cols-1 gap-8">
+                                {solution.videos_demo.map((videoUrl, index) => (
+                                    <div key={index} className="aspect-video w-full">
+                                        <iframe
+                                            src={videoUrl}
+                                            title={`Vidéo démo ${index + 1}`}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                            className="w-full h-full rounded-lg"
+                                        ></iframe>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Liens externes */}
+            {solution.liens_externes && solution.liens_externes.length > 0 && (
+                <div className="container mx-auto px-4 py-16">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-3xl font-bold mb-8">Ressources additionnelles</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {solution.liens_externes.map((lien, index) => (
+                                <a
+                                    key={index}
+                                    href={lien}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-indigo-800 p-4 rounded-lg flex items-center hover:bg-indigo-700 transition-colors"
+                                >
+                                    <span className="text-xl mr-3">🔗</span>
+                                    <span className="truncate">{new URL(lien).hostname}</span>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Contact */}
+            <div className="bg-indigo-900 py-16">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h2 className="text-3xl font-bold mb-6">Intéressé par cette solution ?</h2>
+                        <p className="text-xl mb-8">Contactez-nous pour plus d&apos;informations ou pour une démonstration.</p>
+                        <a 
+                            href={`mailto:${solution.auteur?.email || 'contact@example.com'}`}
+                            className="inline-block bg-white text-indigo-900 font-medium px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                            Nous contacter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
-
-const FeatureCard: FC<FeatureCardProps> = ({ feature }) => {
-  return (
-    <div className="flex flex-col items-center text-center">
-      <div className="bg-indigo-900 rounded-full p-4 mb-4">
-        <div className="text-blue-400">
-          {/* We'll use a simple div with a className for icons */}
-          <div className={`${feature.icon} h-6 w-6`}>
-          <img src={feature.icon} alt="Icone" className="h-full w-full object-contain" />
-          </div>
-        </div>
-      </div>
-      <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-      <p className="text-gray-400">{feature.description}</p>
-    </div>
-  );
-};
-
-interface SolutionPageProps {
-  solution: Solution;
-}
-
-const SolutionPage: FC<SolutionPageProps> = ({ solution }) => {
-  return (
-    <div className="bg-gray-900 text-white min-h-screen">
-
-
-      {/* Solution Header */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <Link href="/solutions" className="text-blue-400 flex items-center">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-5 w-5 mr-1" 
-              viewBox="0 0 20 20" 
-              fill="currentColor"
-            >
-              <path 
-                fillRule="evenodd" 
-                d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" 
-                clipRule="evenodd" 
-              />
-            </svg>
-            Solution / {solution.title}
-          </Link>
-        </div>
-
-        <h1 className="text-4xl font-bold text-center text-blue-400 mb-12">
-          {solution.title}
-        </h1>
-
-        {/* Main Content */}
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl font-bold mb-6">{solution.subtitle}</h2>
-          <p className="text-gray-400 mb-12">{solution.introText}</p>
-          
-          <div className="text-left mb-12">
-            <p className="text-gray-400 mb-6">{solution.description}</p>
-          </div>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto mb-24">
-          {solution.features.map((feature) => (
-            <FeatureCard key={feature.id} feature={feature} />
-          ))}
-        </div>
-      </div>
-
-
-    </div>
-  );
-};
-
-export default SolutionPage;

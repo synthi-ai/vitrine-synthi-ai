@@ -1,0 +1,13 @@
+apiVersion: v2
+name: vitrine-synthi-ai
+description: A Helm chart for vitrine-synthi-ai Next.js 15 application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - nextjs
+  - frontend
+  - synthi-ai
+maintainers:
+  - name: Synthi AI Team
+    email: team@synthi-ai.com

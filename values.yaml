@@ -1,0 +1,88 @@
+replicaCount: 2
+
+image:
+  repository: harbor.synthi-ai.com/synthi-ai/vitrine-synthi-ai
+  tag: latest
+  pullPolicy: Always
+
+# Configuration pour Harbor registry privé
+imagePullSecrets:
+  - name: harbor-registry-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: synthi-ai.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.synthi-ai.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: synthi-ai-tls
+      hosts:
+        - synthi-ai.com
+        - www.synthi-ai.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Variables d'environnement
+env:
+  - name: NODE_ENV
+    value: "production"
+  - name: NEXT_PUBLIC_DOMAIN
+    value: "synthi-ai.com"
+
+# Configuration des sondes
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# Configuration des labels
+labels:
+  app: vitrine-synthi-ai
+  component: frontend
+  part-of: synthi-ai-platform
+
+# Configuration des annotations
+annotations:
+  description: "Vitrine principale de Synthi AI"
+  version: "1.0.0"

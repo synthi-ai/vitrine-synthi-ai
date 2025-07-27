@@ -1,12 +1,11 @@
-
-import BlogNews from '@/components/BlogNews';
 import BlogSection from '@/components/BlogSection';
-import FAQSection from '@/components/Faq';
+import ExpertiseDomainsSection from '@/components/DomainExpertise';
 import Features from '@/components/Features';
-import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
-import Solutions from '@/components/Solutions';
-import Testimonials from '@/components/Testimonials';
+import CustomAssetsSection from '@/components/ia/CustomActionAsset';
+import TeamSection from '@/components/ia/TeamSection';
+import Services from '@/components/Services';
+import SolutionsShowcaseSection from '@/components/ShowCase';
 import TrustSection from '@/components/TrustSection';
 import React from 'react';
 
@@ -17,11 +16,12 @@ export default function Home() {
       <Hero />
       <TrustSection/>
       <Features />
-      <Solutions />
-      <Testimonials/>
+      <CustomAssetsSection /> 
+      <Services />
+      <ExpertiseDomainsSection />
+      <SolutionsShowcaseSection />
+      <TeamSection />
       <BlogSection />
-      <BlogNews/>
-      <FAQSection/>
       {/*<Footer/> */}
     </main>
   );

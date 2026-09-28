@@ -246,11 +246,11 @@ export default function Navbar() {
               <Image
                 src="/logo.png"
                 alt="Synthi AI"
-                width={40}
-                height={40}
-                sizes="40px"
+                width={48}
+                height={48}
+                sizes="48px"
                 priority
-                className="h-10 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                className="h-12 w-auto transition-opacity duration-300 group-hover:opacity-80"
               />
             </Link>
 
@@ -322,7 +322,7 @@ export default function Navbar() {
 
             {/* Brand */}
             <div className="mb-6 pb-5 border-b border-[#6b7db8]/10 flex items-center justify-between">
-              <Image src="/logo.png" alt="Synthi AI" width={40} height={40} sizes="40px" className="h-9 w-auto" />
+              <Image src="/logo.png" alt="Synthi AI" width={48} height={48} sizes="48px" className="h-10 w-auto" />
             </div>
 
             <nav className="flex-1 space-y-0.5">
